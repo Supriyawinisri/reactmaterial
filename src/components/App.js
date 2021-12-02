@@ -12,12 +12,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Header
-          value={value}
-          setValue={setValue()}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex()}
-        />
+        <Header />
         <Routes>
           <Route path="/" element={<Header />} />
           <Route path="/services" element={<Header />} />
@@ -29,12 +24,7 @@ const App = () => {
           <Route path="/mobileapps" element={<Header />} />
           <Route path="/websites" element={<Header />} />
         </Routes>
-        <Footer
-          value={value}
-          setValue={setValue}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex}
-        />
+        <Footer />
       </BrowserRouter>
     </ThemeProvider>
   );

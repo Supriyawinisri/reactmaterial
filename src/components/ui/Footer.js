@@ -35,12 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Footer = ({
-  value = 0,
-  setValue = (f) => f,
-  selectedIndex = 0,
-  setSelectedIndex = (f) => f,
-}) => {
+const Footer = () => {
   const classes = useStyles();
   return (
     <footer className={classes.footer}>

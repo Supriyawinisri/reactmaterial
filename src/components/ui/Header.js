@@ -116,7 +116,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = (props) => {
+const Header = () => {
+  const [value, setValue] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -124,28 +126,8 @@ const Header = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
 
-  useEffect(() => {
-    [...menuOptions, ...routes].forEach((route) => {
-      switch (window.location.pathname) {
-        case `${route.link}`:
-          if (props.value !== route.activeIndex) {
-            props.setValue(route.activeIndex);
-            if (
-              route.selectedIndex &&
-              route.selectedIndex !== props.selectedIndex
-            ) {
-              props.setSelectedIndex(route.selectedIndex);
-            }
-          }
-          break;
-        default:
-          break;
-      }
-    });
-  }, [props.value, menuOptions, props.selectedIndex, routes, props]);
-
   const handleChange = (e, value) => {
-    props.setValue(value);
+    setValue(value);
   };
 
   const handleClick = (e) => {
@@ -156,7 +138,7 @@ const Header = (props) => {
   const handleMenuItemClick = (e, i) => {
     setAnchorEl(null);
     setOpenMenu(false);
-    props.setSelectedIndex(i);
+    setSelectedIndex(i);
   };
 
   const handleClose = (e) => {
@@ -206,10 +188,27 @@ const Header = (props) => {
     { name: "Contact Us", link: "/contact", activeIndex: 4 },
   ];
 
+  useEffect(() => {
+    [...menuOptions, ...routes].forEach((route) => {
+      switch (window.location.pathname) {
+        case `${route.link}`:
+          if (value !== route.activeIndex) {
+            setValue(route.activeIndex);
+            if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
+              setSelectedIndex(route.selectedIndex);
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  }, [value, menuOptions, selectedIndex, routes]);
+
   const tabs = (
     <Fragment>
       <Tabs
-        value={props.value}
+        value={value}
         onChange={handleChange}
         className={classes.tabContainer}
         indicatorColor="primary"
@@ -255,10 +254,10 @@ const Header = (props) => {
             classes={{ root: classes.menuItem }}
             onClick={(event) => {
               handleMenuItemClick(event, i);
-              props.setValue(1);
+              setValue(1);
               handleClose();
             }}
-            selected={i === props.selectedIndex && props.value === 1}
+            selected={i === selectedIndex && value === 1}
           >
             {option.name}
           </MenuItem>
@@ -288,13 +287,13 @@ const Header = (props) => {
               key={`${route}${route.activeIndex}`}
               onClick={() => {
                 setOpenDrawer(false);
-                props.setValue(route.activeIndex);
+                setValue(route.activeIndex);
               }}
               divider
               button
               component={Link}
               to={route.link}
-              selected={props.value === route.activeIndex}
+              selected={value === route.activeIndex}
               classes={{ selected: classes.drawerSelected }}
             >
               <ListItemText className={classes.drawerItem} disableTypography>
@@ -305,13 +304,13 @@ const Header = (props) => {
           <ListItem
             onClick={() => {
               setOpenDrawer(false);
-              props.setValue(5);
+              setValue(5);
             }}
             divider
             button
             component={Link}
             to="/estimate"
-            selected={props.value === 5}
+            selected={value === 5}
             classes={{
               root: classes.drawerIconEstimate,
               selected: classes.drawerSelected,
@@ -341,7 +340,7 @@ const Header = (props) => {
             <Button
               to="/"
               component={Link}
-              onClick={() => props.setValue(0)}
+              onClick={() => setValue(0)}
               disableRipple
               className={classes.logoContainer}
             >
